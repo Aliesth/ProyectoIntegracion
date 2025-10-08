@@ -1,0 +1,281 @@
+/* Hero con imagen de fondo */
+.hero {
+  background: url('../img/feria-bg.jpg') center/cover no-repeat;
+  height: 90vh;
+}
+
+/* Navbar */
+.navbar-brand {
+  font-size: 1.3rem;
+}
+
+
+/* Productos cards */
+.card img {
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 2px solid #eee;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+}
+
+/* Sección beneficios */
+.bg-light .p-4 {
+  transition: transform 0.3s ease;
+}
+
+.bg-light .p-4:hover {
+  transform: scale(1.05);
+}
+
+/* Botón personalizado */
+.btn-primary {
+  background-color: #28a745;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #218838;
+}
+
+.btn-outline-success {
+  border-radius: 30px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+  background-color: #28a745;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+
+/*Producto.html*/
+/* Producto destacado del mes */
+.card.border-success {
+  border: 2px solid #28a745 !important;
+}
+
+/* Botones del catálogo */
+.btn-outline-success:hover {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Barra de búsqueda */
+input[type="text"] {
+  border: 2px solid #28a745;
+}
+
+/*carrito.hml*/
+/* Estilo de tabla carrito */
+.table thead {
+  font-size: 1.1rem;
+}
+
+.table td input[type="number"] {
+  width: 70px;
+  margin: auto;
+}
+
+/* Resumen */
+.bg-light.rounded {
+  border: 2px solid #28a745;
+}
+
+/* Botón eliminar */
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+}
+.btn-danger:hover {
+  background-color: #b02a37;
+}
+
+/*venta.html*/
+/* Línea de tiempo */
+.timeline .circle {
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  border-radius: 50%;
+  display: inline-block;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Resumen de ventas */
+.bg-light .p-4 {
+  transition: transform 0.3s ease;
+}
+.bg-light .p-4:hover {
+  transform: scale(1.05);
+}
+
+/*subasta*/
+/* Estilo de Subastas */
+
+h1 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.card-header {
+  font-size: 1.2rem;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f3fdf5;
+}
+
+.list-group-item {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.badge {
+  font-size: 0.9rem;
+  padding: 8px 12px;
+}
+
+/*reporte*/
+/* Estilos para Reportes */
+
+h1 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  border-radius: 15px;
+  border: none;
+}
+
+.card h5 {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.btn-lg {
+  border-radius: 30px;
+  padding: 10px 30px;
+  font-size: 1.1rem;
+}
+
+canvas {
+  max-height: 300px;
+}
+
+/*login y register*/
+/* Estilos de Login & Registro */
+body {
+  background: linear-gradient(to right, #e8f5e9, #f1f8e9);
+}
+
+.card {
+  border-radius: 20px;
+  border: none;
+}
+
+.nav-tabs .nav-link {
+  font-weight: bold;
+  color: #555;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn-success, .btn-primary {
+  border-radius: 30px;
+  font-weight: bold;
+}
+
+/*nosotros*/
+/* Estilos página Nosotros */
+
+h1, h2, h3 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  border-radius: 15px;
+}
+
+.card h5 {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.img-fluid {
+  max-width: 700px;
+  border: 3px solid #28a745;
+}
+
+.organigrama {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.organigrama ul {
+  padding-top: 20px; 
+  position: relative;
+  list-style: none;
+}
+
+.organigrama li {
+  float: left; 
+  text-align: center;
+  position: relative;
+  padding: 20px 5px 0 5px;
+}
+
+.organigrama li::before, .organigrama li::after {
+  content: '';
+  position: absolute; 
+  top: 0; 
+  right: 50%;
+  border-top: 2px solid #28a745;
+  width: 50%; 
+  height: 20px;
+}
+
+.organigrama li::after {
+  right: auto; 
+  left: 50%;
+  border-left: 2px solid #28a745;
+}
+
+.organigrama li:only-child::before, 
+.organigrama li:only-child::after {
+  display: none;
+}
+
+.organigrama li:only-child { 
+  padding-top: 0; 
+}
+
+.organigrama li span {
+  display: inline-block;
+  border: 2px solid #28a745;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: #f8f9fa;
+  font-weight: bold;
+  color: #333;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+}
+
+.organigrama .boss {
+  background: #28a745;
+  color: white;
+}
