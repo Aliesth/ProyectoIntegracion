@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
 class Rol(models.TextChoices):
-    ADMINISTRADOR = 'ADMINISTRADOR', _('Administrador')
-    EMPLEADO = 'EMPLEADO', _('Productor') # Cambiado a 'Productor' según tu select
-    CLIENTE = 'CLIENTE', _('Cliente')
+    ADMINISTRADOR = 'ADMINISTRADOR', _('administrador')
+    productor = 'productor', _('productor') # Cambiado a 'Productor' según tu select
+    cliente = 'cliente', _('cliente')
     TRANSPORTISTA = 'TRANSPORTISTA', _('Transportista')
     CONSULTOR = 'CONSULTOR', _('Consultor')
 
@@ -16,7 +16,7 @@ class Perfil(models.Model):
     rol = models.CharField(
         max_length=20,
         choices=Rol.choices,
-        default=Rol.CLIENTE,
+        default=Rol.cliente,
         verbose_name='Rol del usuario'
     )
 

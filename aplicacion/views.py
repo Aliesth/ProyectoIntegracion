@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.db import transaction
+from django.contrib.auth.models import Group
 
 from .models import Perfil 
 from .forms import RegistroForm # <-- Importamos el formulario personalizado
@@ -40,41 +41,53 @@ def login_usuario(request):
         })
 
 
-# VISTA DE REGISTRO (Maneja la creación de cuenta)
 def registrar_usuario(request):
     if request.method == 'POST':
         form = RegistroForm(request.POST) 
         
         if form.is_valid():
-            user_rol = form.cleaned_data.get('rolReg')
+            user_rol_name = form.cleaned_data.get('rolReg')
             
+            # --- INICIO DE LA TRANSACCIÓN ATÓMICA ---
             try:
                 with transaction.atomic():
-                    # CRÍTICO: form.save() guarda el objeto User completo con email y contraseña hasheada
+                    # 1. Guarda el objeto User
                     user = form.save() 
                     
-                    # Crea el objeto Perfil
-                    Perfil.objects.create(usuario=user, rol=user_rol)
+                    # 2. Crea el objeto Perfil
+                    Perfil.objects.create(usuario=user, rol=user_rol_name)
 
-                    # Inicia sesión y redirige
+                    # 3. 🎯 LÓGICA DE ASIGNACIÓN DE GRUPO (CORREGIDA) 🎯
+                    try:
+                        # Busca el Grupo de Django
+                        grupo_django = Group.objects.get(name=user_rol_name)
+                        user.groups.add(grupo_django)
+                        print(f"✅ Usuario {user.username} asignado al grupo {user_rol_name}.")
+                        
+                    except Group.DoesNotExist:
+                        # Si el grupo no existe, solo lo reportamos pero no revertimos el registro
+                        print(f"🛑 ADVERTENCIA: El Grupo '{user_rol_name}' no existe en Django. Asignación omitida.")
+                        pass 
+                    
+                    # 4. Inicia sesión y redirige (Solo si todo lo anterior tuvo éxito)
                     login(request, user)
-                    return redirect('login') 
-            
+                    return redirect('index')  # Es mejor redirigir al 'index' (dashboard)
+                
             except Exception as e:
-                # Si falla aquí, la causa está en la BD (ej. migraciones o restricción de campo)
-                print(f"🛑 FALLO CRÍTICO DE GUARDADO EN BD: {e}")
+                # Si falla cualquier cosa dentro de la transacción, se revierte.
+                print(f"🛑 FALLO CRÍTICO DURANTE LA TRANSACCIÓN: {e}")
                 form.add_error(None, "Ocurrió un error al crear el usuario. Por favor, inténtelo de nuevo.")
                 
-        # Si la validación de formulario (ej. contraseñas) o la transacción falla
+        # Si la validación de formulario o la transacción falla
         return render(request, 'login.html', {
             'register_form': form, # Contiene los errores de registro
             'login_form': AuthenticationForm() 
         })
         
     else:
-        # Petición GET (Esto solo se usa si acceden directamente a /register/, pero lo mejor es redirigir a login)
-        return redirect('login') 
-# Nota: También necesitas una vista simple para 'index'
+        # Petición GET
+        # Asumiendo que 'login_usuario' es el nombre de la URL para la vista de login.
+        return redirect('login_usuario')
 def index(request):
     return render(request, 'index.html') 
 
