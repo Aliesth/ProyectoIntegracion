@@ -1,57 +1,79 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login 
-from django.contrib.auth.forms import UserCreationForm
-from django.db import transaction 
-# Asegúrate de que tu modelo se llama 'Perfil' y está importado
-from .models import Perfil # Importamos tu modelo Perfil
-# Asegúrate de que tu modelo se llama 'Perfil' y está importado
-from .models import Perfil, Rol # Importamos tu modelo Perfil
-# Create your views here.
-def registrar_usuario(request):
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import AuthenticationForm
+from django.db import transaction
+
+from .models import Perfil 
+from .forms import RegistroForm # <-- Importamos el formulario personalizado
+
+# Vista Principal/Dashboard
+def index(request):
+    # Aquí puedes añadir lógica de require login, por ahora solo renderiza
+    return render(request, 'index.html') 
+
+
+# VISTA DE LOGIN (Maneja el inicio de sesión)
+def login_usuario(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        user_email = request.POST.get('email')
-        user_rol = request.POST.get('rolReg')
-        
-        # 💡 Imprime el Rol recibido para la depuración
-        # print(f"--- DEPURACIÓN: Rol recibido: {user_rol} ---")
+        form = AuthenticationForm(request, data=request.POST)
         
         if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
             
-            # 1. Validación de rol: CRÍTICO para que no falle Perfil.objects.create
-            if user_rol not in Rol.values:
-                form.add_error(None, f"El rol '{user_rol}' no es una opción válida.")
-                return render(request, 'login.html', {'form': form})
+            if user is not None:
+                login(request, user)
+                return redirect('index') # Éxito: Va a /home/
+
+        # FALLO: Si la validación falla o authenticate devuelve None
+        return render(request, 'login.html', {
+            'login_form': form, # Contiene los errores de autenticación
+            'register_form': RegistroForm() 
+        })
+
+    else:
+        # Petición GET: Muestra la página de Login/Registro
+        return render(request, 'login.html', {
+            'login_form': AuthenticationForm(), 
+            'register_form': RegistroForm()
+        })
+
+
+# VISTA DE REGISTRO (Maneja la creación de cuenta)
+def registrar_usuario(request):
+    if request.method == 'POST':
+        form = RegistroForm(request.POST) 
+        
+        if form.is_valid():
+            user_rol = form.cleaned_data.get('rolReg')
             
             try:
                 with transaction.atomic():
-                    # 2. Guardar el objeto User (contraseña y username)
-                    user = form.save(commit=False)
-                    user.email = user_email
-                    user.save() 
+                    # CRÍTICO: form.save() guarda el objeto User completo con email y contraseña hasheada
+                    user = form.save() 
                     
-                    # 3. Crear el objeto Perfil con el rol
+                    # Crea el objeto Perfil
                     Perfil.objects.create(usuario=user, rol=user_rol)
 
-                    # 4. Iniciar sesión y redirigir
+                    # Inicia sesión y redirige
                     login(request, user)
-                    return redirect('index')
+                    return redirect('login') 
             
             except Exception as e:
-                # 📢 ¡CRÍTICO! IMPRIME ESTO EN LA TERMINAL 📢
-                print("=============================================")
-                print(f"🛑 FALLO DE TRANSACCIÓN: El usuario NO se guardó.")
-                print(f"🛑 RAZÓN DEL FALLO: {e}")
-                print("=============================================")
+                # Si falla aquí, la causa está en la BD (ej. migraciones o restricción de campo)
+                print(f"🛑 FALLO CRÍTICO DE GUARDADO EN BD: {e}")
+                form.add_error(None, "Ocurrió un error al crear el usuario. Por favor, inténtelo de nuevo.")
                 
-        # Si la validación falla (ej: contraseñas no coinciden) o hay un error en la BD
-        return render(request, 'login.html', {'form': form})
+        # Si la validación de formulario (ej. contraseñas) o la transacción falla
+        return render(request, 'login.html', {
+            'register_form': form, # Contiene los errores de registro
+            'login_form': AuthenticationForm() 
+        })
         
     else:
-        # Petición GET
-        form = UserCreationForm()
-        return render(request, 'login.html', {'form': form})
-
+        # Petición GET (Esto solo se usa si acceden directamente a /register/, pero lo mejor es redirigir a login)
+        return redirect('login') 
 # Nota: También necesitas una vista simple para 'index'
 def index(request):
     return render(request, 'index.html') 

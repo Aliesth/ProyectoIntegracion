@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 class Rol(models.TextChoices):
     ADMINISTRADOR = 'ADMINISTRADOR', _('Administrador')
-    EMPLEADO = 'EMPLEADO', _('Empleado') # El valor que se guarda es EMPLEADO
+    EMPLEADO = 'EMPLEADO', _('Productor') # Cambiado a 'Productor' según tu select
     CLIENTE = 'CLIENTE', _('Cliente')
     TRANSPORTISTA = 'TRANSPORTISTA', _('Transportista')
     CONSULTOR = 'CONSULTOR', _('Consultor')

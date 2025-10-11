@@ -22,8 +22,11 @@ app_nanme = 'aplicacion'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.registrar_usuario, name='login'),
-    path('index/', views.index, name='index'),
+    path('', views.login_usuario, name='login'), 
+    # 2. La ruta de Registro (a donde apunta el action del formulario)
+    path('register/', views.registrar_usuario, name='register'),
+    # 3. La página de Inicio real (a donde redirige después del login exitoso)
+    path('home/', views.index, name='index'), 
     path('productos/', views.productos, name='productos'),
     path('carrito/', views.carrito, name='carrito'),
     path('subastas/', views.subastas, name='subastas'),
