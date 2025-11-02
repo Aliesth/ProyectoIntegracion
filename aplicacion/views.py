@@ -3,6 +3,8 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.db import transaction
 from django.contrib.auth.models import Group
+from django.views.generic import ListView
+from .models import Fruta
 
 from .models import Perfil 
 from .forms import RegistroForm # <-- Importamos el formulario personalizado
@@ -88,6 +90,14 @@ def registrar_usuario(request):
         # Petición GET
         # Asumiendo que 'login_usuario' es el nombre de la URL para la vista de login.
         return redirect('login_usuario')
+    
+
+class CatalogoFrutasView(ListView):
+    model=Fruta
+    template_name='catalogo/lista_frutas.html'
+    context_object_name="frutas"
+    paginate_by=12    #cantidad de pruductos por  pagina
+
 def index(request):
     return render(request, 'index.html') 
 

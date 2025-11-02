@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from aplicacion import views
+from aplicacion.views import CatalogoFrutasView
+
+
 
 app_nanme = 'aplicacion'
 
@@ -33,4 +36,5 @@ urlpatterns = [
     path('reportes/', views.reportes, name='reportes'),
     path('ventas/', views.ventas, name='ventas'),
     path('nosotros/', views.nosotros, name='nosotros'),
+    path('catalogo/',CatalogoFrutasView.as_view() ,name='catalogo_frutas')
 ]
