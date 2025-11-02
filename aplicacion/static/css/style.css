@@ -275,3 +275,39 @@ body {
     background: #28a745;
     color: white;
 }
+
+/* Estilos básicos para el catálogo */
+.catalogo {
+    display: grid;
+    /* Muestra 3 columnas de cards, ajusta a tu gusto */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+    gap: 20px;
+    padding: 20px;
+}
+
+.card-producto {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    background-color: white;
+}
+
+/* Estilos para la paginación */
+.paginacion {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.paginacion a, .paginacion .actual {
+    margin: 0 5px;
+    padding: 8px 12px;
+    border: 1px solid #007bff;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.paginacion .actual {
+    background-color: #007bff;
+    color: white;
+}

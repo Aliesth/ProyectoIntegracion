@@ -97,6 +97,7 @@ class CatalogoFrutasView(ListView):
     template_name='catalogo/lista_frutas.html'
     context_object_name="frutas"
     paginate_by=12    #cantidad de pruductos por  pagina
+    ordering = ['nombre']
 
 def index(request):
     return render(request, 'index.html') 
